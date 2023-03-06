@@ -23,7 +23,7 @@ const env = async () => {
    // console.log(result);
 
 
-   await product.updateProduct(1, 10);
+   await product.updateProduct(1, 50, 'abc478' , "Fish", "salmon", 15, "no");
 
    //await product.deleteProduct(2);
 
@@ -33,6 +33,3 @@ const env = async () => {
 
 
 env();
-
-//let consutaId = await product.getProductById(1);
-//console.log(consutaId);
