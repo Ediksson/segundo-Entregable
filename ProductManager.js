@@ -47,34 +47,29 @@ export default class ProductManager {
     }
     
 // leer spread operator investigar crud
-    updateProduct = async (id, stock) => {
-     
-    fs.existsSync(this.path);
-    const products = await this.getproducts();
-    const buscarId = products.findIndex((product) => product.id === id); // me muestra el producto de acuerdo al id 
-    
-    if(buscarId === -1) {
-        console.error("product not found");
-        return[]; 
-    }else{
+updateProduct = async (id, stock, code, title, description, price, thumbnail) => { //recibe por parametro todo el objeto/producto
 
-        for (var i = 0; i < products.length; i++){
-            if( products[i].id ===id){
-                products.stock = stock;
-                i--;
-            }    
-
+    try {
+        const products = await this.getproducts();  //usamos el metodo que creaste antes para traernos TODOS los productos
+        const product = products.find(product => product.id === id) //encontramos solo el que queremos modificar
+        if (!product) { //validamos que si no se encuentra arrojamos el mensaje de error de abajo
+            console.log(`no se encontro el producto con id ${id}`)
+            return
+        } else {   //aca predefinimos el objeto con los valores que nos llegan al invocar la funcion en index.js
+            product.code = code,
+                product.title = title,
+                product.description = description,
+                product.Price = price,
+                product.thumbnail = thumbnail,
+                product.stock = stock
+            await fs.promises.writeFile(this.path, JSON.stringify(products, null, "\t")); //reescribimos el archivo .json ya modificado
+            return console.log(product)
         }
-    
-        this.addProduct(products);
-        await fs.promises.writeFile(this.path, JSON.stringify(this.products, null, "\t"));
-    
-        console.log(`updated succesfull`);
+    } catch (error) {
+        console.error(error)
+    }
+} 
 
-    } // else
-   
-
-} // updateProduct
 
 deleteProduct = async (id) => {
     fs.existsSync(this.path)
@@ -112,4 +107,3 @@ deleteProduct = async (id) => {
 
     */
 } // Class
-
